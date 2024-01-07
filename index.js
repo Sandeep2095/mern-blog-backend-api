@@ -65,8 +65,17 @@ app.post('/login', async (req, res) => {
 
 app.get('/profile', (req, res) => {
 	const { token } = req.cookies;
+
+	if (!token) {
+		return res.status(401).json({ error: 'Token not provided' });
+	}
+
 	jwt.verify(token, secret, {}, (err, info) => {
-		if (err) throw err;
+		if (err) {
+			console.error('Error during profile verification:', err);
+			return res.status(401).json({ error: 'Invalid token' });
+		}
+
 		res.json(info);
 	});
 });
@@ -149,5 +158,3 @@ app.get('/post/:id', async (req, res) => {
 
 app.listen(4000);
 // hello
-
-
