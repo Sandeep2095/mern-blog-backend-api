@@ -148,8 +148,6 @@ app.get('/post/:id', async (req, res) => {
 });
 
 app.listen(4000);
+// hello
 
-// sks34246 - username MongoDB
-// Sharma2098 - password MongoDB
-// mongodb+srv://sks34246:Sharma2098@cluster.op7t35o.mongodb.net/
-// mongodb+srv://sks34246:Sharma2098@cluster.op7t35o.mongodb.net/?retryWrites=true&w=majority
+
