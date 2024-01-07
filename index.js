@@ -21,7 +21,7 @@ app.use('/uploads', express.static(__dirname + '/uploads'));
 
 mongoose
 	.connect(
-		'mongodb+srv://sks34246:Sharma2098@cluster.op7t35o.mongodb.net/?retryWrites=true&w=majority'
+		'mongodb+srv://sks2098:sharma2098@cluster.op7t35o.mongodb.net/?retryWrites=true&w=majority'
 	)
 	.then(() => {
 		console.log('MongoDB connected');
