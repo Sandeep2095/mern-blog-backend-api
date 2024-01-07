@@ -63,12 +63,15 @@ app.post('/login', async (req, res) => {
 	// res.json(userDoc);
 });
 
-app.get('/profile', (req, res) => {
+app.get('/profile', async (req, res) => {
 	const { token } = req.cookies;
-	jwt.verify(token, secret, {}, (err, info) => {
-		if (err) throw err;
+
+	try {
+		const info = await jwt.verify(token, secret, {});
 		res.json(info);
-	});
+	} catch (err) {
+		throw err;
+	}
 });
 
 app.post('/logout', (req, res) => {
@@ -149,5 +152,3 @@ app.get('/post/:id', async (req, res) => {
 
 app.listen(4000);
 // hello
-
-
