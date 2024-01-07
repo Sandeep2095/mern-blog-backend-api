@@ -26,7 +26,12 @@ app.use('/uploads', express.static(__dirname + '/uploads'));
 
 mongoose
 	.connect(
-		'mongodb+srv://sks2098:sharma2098@cluster.op7t35o.mongodb.net/?retryWrites=true&w=majority'
+		'mongodb+srv://sks2098:sharma2098@cluster.op7t35o.mongodb.net/?retryWrites=true&w=majority',
+		{
+			useNewUrlParser: true,
+			useCreateIndex: true,
+			useUnifiedTopology: true,
+		}
 	)
 	.then(() => {
 		console.log('MongoDB connected');
@@ -69,10 +74,13 @@ app.post('/login', async (req, res) => {
 });
 
 app.get('/profile', async (req, res) => {
-	// changes as per CHATGPT solutions
 	const { token } = req.cookies;
 
 	try {
+		if (!token) {
+			return res.status(401).json({ error: 'Token not provided' });
+		}
+
 		const info = await jwt.verify(token, secret, {});
 		res.json(info);
 	} catch (err) {
@@ -151,7 +159,7 @@ app.get('/post', async (req, res) => {
 			.populate('author', ['username'])
 			.sort({ createdAt: -1 })
 			.limit(20)
-			.options(options);
+			.lean();
 		res.json(posts);
 	} catch (error) {
 		console.error('Error during post retrieval:', error);
