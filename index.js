@@ -145,12 +145,18 @@ app.put('/post', uploadMiddleware.single('file'), async (req, res) => {
 });
 
 app.get('/post', async (req, res) => {
-	res.json(
-		await Post.find()
+	try {
+		const options = { maxTimeMS: 20000 }; // Set to 20 seconds
+		const posts = await Post.find()
 			.populate('author', ['username'])
 			.sort({ createdAt: -1 })
 			.limit(20)
-	);
+			.options(options);
+		res.json(posts);
+	} catch (error) {
+		console.error('Error during post retrieval:', error);
+		res.status(500).json({ error: 'Internal Server Error' });
+	}
 });
 
 app.get('/post/:id', async (req, res) => {
