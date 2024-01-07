@@ -69,13 +69,15 @@ app.post('/login', async (req, res) => {
 });
 
 app.get('/profile', async (req, res) => {
+	// changes as per CHATGPT solutions
 	const { token } = req.cookies;
 
 	try {
 		const info = await jwt.verify(token, secret, {});
 		res.json(info);
 	} catch (err) {
-		throw err;
+		console.error('Error during profile verification:', err);
+		res.status(500).json({ error: 'Internal Server Error' });
 	}
 });
 
@@ -117,7 +119,7 @@ app.put('/post', uploadMiddleware.single('file'), async (req, res) => {
 		fs.renameSync(path, newPath);
 	}
 
-	const { token } = req.cookies;
+	const { token } = req.cookies || { token: '' }; // chnages as per ChatGPT solutions
 	jwt.verify(token, secret, {}, async (err, info) => {
 		if (err) throw err;
 		const { title, summary, content, id } = req.body;
