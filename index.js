@@ -74,6 +74,8 @@ app.get('/profile', async (req, res) => {
 	}
 });
 
+// New Change
+
 app.post('/logout', (req, res) => {
 	res.cookie('token', '').json('ok');
 });
