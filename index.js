@@ -14,7 +14,12 @@ const fs = require('fs');
 const salt = bcrypt.genSaltSync(10);
 const secret = 'abcdefghijklmnopqrstuvxyz0123456789';
 
-app.use(cors({ credentials: true, origin: 'http://localhost:3000' }));
+app.use(
+	cors({
+		credentials: true,
+		origin: 'https://harmonious-kitsune-6f79c5.netlify.app',
+	})
+);
 app.use(express.json());
 app.use(cookieParser());
 app.use('/uploads', express.static(__dirname + '/uploads'));
