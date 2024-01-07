@@ -29,7 +29,6 @@ mongoose
 		'mongodb+srv://sks2098:sharma2098@cluster.op7t35o.mongodb.net/?retryWrites=true&w=majority',
 		{
 			useNewUrlParser: true,
-			useCreateIndex: true,
 			useUnifiedTopology: true,
 		}
 	)
