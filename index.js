@@ -14,24 +14,14 @@ const fs = require('fs');
 const salt = bcrypt.genSaltSync(10);
 const secret = 'abcdefghijklmnopqrstuvxyz0123456789';
 
-app.use(
-	cors({
-		credentials: true,
-		origin: 'https://harmonious-kitsune-6f79c5.netlify.app',
-	})
-);
+app.use(cors({ credentials: true, origin: 'http://localhost:3000' }));
 app.use(express.json());
 app.use(cookieParser());
 app.use('/uploads', express.static(__dirname + '/uploads'));
 
 mongoose
 	.connect(
-		'mongodb+srv://sks2098:sharma2098@cluster.op7t35o.mongodb.net/?retryWrites=true&w=majority',
-		{
-			useNewUrlParser: true,
-			useUnifiedTopology: true,
-			// hello
-		}
+		'mongodb+srv://sks2098:sharma2098@cluster.op7t35o.mongodb.net/?retryWrites=true&w=majority'
 	)
 	.then(() => {
 		console.log('MongoDB connected');
@@ -73,23 +63,13 @@ app.post('/login', async (req, res) => {
 	// res.json(userDoc);
 });
 
-app.get('/profile', async (req, res) => {
+app.get('/profile', (req, res) => {
 	const { token } = req.cookies;
-
-	try {
-		if (!token) {
-			return res.status(401).json({ error: 'Token not provided' });
-		}
-
-		const info = await jwt.verify(token, secret, {});
+	jwt.verify(token, secret, {}, (err, info) => {
+		if (err) throw err;
 		res.json(info);
-	} catch (err) {
-		console.error('Error during profile verification:', err);
-		res.status(500).json({ error: 'Internal Server Error' });
-	}
+	});
 });
-
-// New Change
 
 app.post('/logout', (req, res) => {
 	res.cookie('token', '').json('ok');
@@ -127,7 +107,7 @@ app.put('/post', uploadMiddleware.single('file'), async (req, res) => {
 		fs.renameSync(path, newPath);
 	}
 
-	const { token } = req.cookies || { token: '' }; // chnages as per ChatGPT solutions
+	const { token } = req.cookies;
 	jwt.verify(token, secret, {}, async (err, info) => {
 		if (err) throw err;
 		const { title, summary, content, id } = req.body;
@@ -153,18 +133,12 @@ app.put('/post', uploadMiddleware.single('file'), async (req, res) => {
 });
 
 app.get('/post', async (req, res) => {
-	try {
-		const options = { maxTimeMS: 20000 }; // Set to 20 seconds
-		const posts = await Post.find()
+	res.json(
+		await Post.find()
 			.populate('author', ['username'])
 			.sort({ createdAt: -1 })
 			.limit(20)
-			.lean();
-		res.json(posts);
-	} catch (error) {
-		console.error('Error during post retrieval:', error);
-		res.status(500).json({ error: 'Internal Server Error' });
-	}
+	);
 });
 
 app.get('/post/:id', async (req, res) => {
@@ -175,3 +149,5 @@ app.get('/post/:id', async (req, res) => {
 
 app.listen(4000);
 // hello
+
+
