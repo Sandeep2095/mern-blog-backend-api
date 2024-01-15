@@ -130,21 +130,17 @@ app.put('/post', uploadMiddleware.single('file'), async (req, res) => {
 		const { title, summary, content, id } = req.body;
 		const postDoc = await Post.findById(id);
 		const isAuthor = JSON.stringify(postDoc.author) === JSON.stringify(info.id);
-		// res.json({ isAuthor, postDoc, info });
 
 		if (!isAuthor) {
 			return res.status(400).json('you are not the author');
 		}
 
-		await postDoc.updateOne(
-			// { _id: id },
-			{
-				title,
-				summary,
-				content,
-				cover: newPath ? newPath : postDoc.cover,
-			}
-		);
+		await postDoc.updateOne({
+			title,
+			summary,
+			content,
+			cover: newPath ? newPath : postDoc.cover,
+		});
 		res.json(postDoc);
 	});
 });
