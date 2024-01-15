@@ -1,6 +1,6 @@
 const express = require('express');
-const app = express();
 const cors = require('cors');
+const app = express();
 const User = require('./models/User');
 const Post = require('./models/Post');
 const mongoose = require('mongoose');
@@ -69,7 +69,6 @@ app.post('/login', async (req, res) => {
 	} else {
 		res.status(400).json('Wrong Credientials');
 	}
-	// res.json(userDoc);
 });
 
 app.get('/profile', (req, res) => {
@@ -84,7 +83,6 @@ app.get('/profile', (req, res) => {
 			console.error('Error during profile verification:', err);
 			return res.status(401).json({ error: 'Invalid token' });
 		}
-
 		res.json(info);
 	});
 });
