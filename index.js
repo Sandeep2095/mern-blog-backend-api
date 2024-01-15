@@ -14,13 +14,15 @@ const fs = require('fs');
 const salt = bcrypt.genSaltSync(10);
 const secret = 'abcdefghijklmnopqrstuvxyz0123456789';
 
-const corsOptions = {
-	credentials: true,
-	origin: 'https://harmonious-kitsune-6f79c5.netlify.app',
-	methods: 'GET,PUT,POST,',
-};
+app.use(
+	cors({
+		credentials: true,
+		origin: 'https://harmonious-kitsune-6f79c5.netlify.app',
+		methods: ['GET', 'POST', 'PUT', 'OPTIONS'], // Add OPTIONS here
+	})
+);
 
-app.use(cors(corsOptions));
+app.options('*', cors()); // Enable preflight for all routes
 // origin: 'http://localhost:3000',
 
 app.use(express.json());
