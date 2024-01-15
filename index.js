@@ -17,6 +17,7 @@ const secret = 'abcdefghijklmnopqrstuvxyz0123456789';
 app.use(
 	cors({
 		credentials: true,
+		// origin: 'http://localhost:3000',
 		origin: 'https://harmonious-kitsune-6f79c5.netlify.app',
 	})
 );
@@ -134,7 +135,7 @@ app.put('/post', uploadMiddleware.single('file'), async (req, res) => {
 		}
 
 		await postDoc.updateOne(
-			{ _id: id },
+			// { _id: id },
 			{
 				title,
 				summary,
@@ -162,4 +163,3 @@ app.get('/post/:id', async (req, res) => {
 });
 
 app.listen(4000);
-// hello
