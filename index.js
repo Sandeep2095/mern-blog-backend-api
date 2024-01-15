@@ -17,7 +17,7 @@ const secret = 'abcdefghijklmnopqrstuvxyz0123456789';
 app.use(
 	cors({
 		credentials: true,
-		origin: '*',
+		origin: 'https://harmonious-kitsune-6f79c5.netlify.app',
 		methods: ['GET', 'POST', 'PUT'],
 	})
 );
